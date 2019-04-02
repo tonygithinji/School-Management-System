@@ -1,2 +1,2 @@
 # School-Management-System
-Okolea Interview Task
+Built with React and FireStore

@@ -4,6 +4,9 @@
 .mb-10{
 	margin-bottom: 10px;
 }
+.no-margin{
+    margin: 0 !important;
+}
 .navbar a.active{
 	color: #555;
     background-color: #e7e7e7;
@@ -11,4 +14,22 @@
 .navbar-default .navbar-nav>li>a.active:focus, .navbar-default .navbar-nav>li>a.active:hover {
     color: #333;
     background-color: #e7e7e7 !important;
+}
+.badge-warning {
+background-color: #f89406 !important;
+}
+.badge-warning:hover {
+background-color: #c67605;
+}
+.badge-success {
+background-color: #468847 !important;
+}
+.badge-success:hover {
+background-color: #356635;
+}
+.badge-info {
+background-color: #3a87ad !important;
+}
+.badge-info:hover {
+background-color: #2d6987;
 }

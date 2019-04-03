@@ -10,6 +10,7 @@ import Dashboard from './components/Dashboard';
 import Students from './components/Students';
 import Teachers from './components/Teachers';
 import Classes from './components/Classes';
+import AddClass from './components/AddClass';
 
 ReactDOM.render(
 	<Router>
@@ -19,7 +20,8 @@ ReactDOM.render(
 			<Route exact path="/" component={Dashboard} />
 			<Route path="/students" component={Students} />
 			<Route path="/teachers" component={Teachers} />
-			<Route path="/classes" component={Classes} />
+			<Route exact path="/classes" component={Classes} />
+			<Route path="/classes/add" component={AddClass} />
 		</div>
 		</React.Fragment>
 	</Router>

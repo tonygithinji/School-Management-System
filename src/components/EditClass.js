@@ -3,18 +3,35 @@ import { NavLink  } from 'react-router-dom';
 
 import firebase from '../Firebase';
 
-class Classes extends Component {
+class EditClass extends Component {
     
     constructor(){
         super();
 
-        this.ref = firebase.firestore().collection('classes');
-
         this.state = {
+            key:"",
             name: "",
             capacity: "",
             loading: false
         }
+    }
+
+    componentDidMount(){
+        const ref = firebase.firestore().collection('classes').doc(this.props.match.params.id);
+
+        ref.get().then((doc) => {
+            if (doc.exists) {
+                const _class = doc.data();
+                console.log(_class);
+                this.setState({
+                    key: doc.id,
+                    name: _class.name,
+                    capacity: _class.capacity
+                });
+            } else {
+                console.log("No such document!");
+            }
+        });
     }
 
     onChange = (e) => {
@@ -30,12 +47,11 @@ class Classes extends Component {
         });
 
         const { name, capacity } = this.state;
+        const updateRef = firebase.firestore().collection('classes').doc(this.state.key);
 
-        this.ref.add({
-            name,
-            capacity,
-            students_num: 0,
-            teachers_num: 0
+        updateRef.set({
+            name: name,
+            capacity: capacity
         }).then((docRef)=>{
             this.setState({
                 name: "",
@@ -54,9 +70,9 @@ class Classes extends Component {
         let button;
 
         if(loading === true){
-            button = <button type="submit" className="btn btn-success"> <i className="fa fa-spinner fa-spin"></i> Adding</button>
+            button = <button type="submit" className="btn btn-success"> <i className="fa fa-spinner fa-spin"></i> Updating</button>
         }else{
-            button = <button type="submit" className="btn btn-success">Add Class</button>
+            button = <button type="submit" className="btn btn-success">Update Class</button>
         }
 
 		return (
@@ -64,8 +80,8 @@ class Classes extends Component {
 				<div className="row">
 					<div className="col-md-12">
                         <div className="clearfix">
-                            <NavLink to="/classes" className="btn btn-default"><i className="fa fa-chevron-left"></i> All Classes</NavLink>
-                            <h3 className="text-center">Add a New Class</h3>
+                            <NavLink to="/classes" className="btn btn-primary"><i className="fa fa-chevron-left"></i> All Classes</NavLink>
+                            <h3 className="text-center">Update Class</h3>
                         </div>
 						<div className="panel panel-default">
                             <div className="panel-body">
@@ -91,4 +107,4 @@ class Classes extends Component {
 	}
 }
 
-export default Classes;
+export default EditClass;

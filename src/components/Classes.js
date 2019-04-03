@@ -51,7 +51,7 @@ class Classes extends Component {
 				<div className="row">
 					<div className="col-md-12">
 						<div className="text-right mb-10">
-							<NavLink to="classes/add" className="btn btn-primary"><i className="fa fa-plus"></i> Add New Class</NavLink>
+							<NavLink to="/classes/add" className="btn btn-primary"><i className="fa fa-plus"></i> Add New Class</NavLink>
 						</div>
 						<div className="panel panel-default">
 							<div className="panel-body">
@@ -70,7 +70,7 @@ class Classes extends Component {
 									  {this.state.classes.map(_class => 
 										  	<tr key={_class.key}>
 												<td>{ i++ }</td>
-												<td>{ _class.name }</td>
+												<td><NavLink to={`/classes/edit/${_class.key}`}>{_class.name}</NavLink></td>
 												<td>{ _class.students_num }</td>
 												<td>{ _class.teachers_num }</td>
 												<td>{ _class.capacity }</td>

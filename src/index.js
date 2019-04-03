@@ -11,6 +11,8 @@ import Students from './components/Students';
 import Teachers from './components/Teachers';
 import Classes from './components/Classes';
 import AddClass from './components/AddClass';
+import EditClass from './components/EditClass';
+import AddStudent from './components/AddStudent';
 
 ReactDOM.render(
 	<Router>
@@ -18,10 +20,12 @@ ReactDOM.render(
 		<Nav />
 		<div className="container main-content">
 			<Route exact path="/" component={Dashboard} />
-			<Route path="/students" component={Students} />
+			<Route exact path="/students" component={Students} />
+			<Route path="/students/add" component={AddStudent} />
 			<Route path="/teachers" component={Teachers} />
 			<Route exact path="/classes" component={Classes} />
 			<Route path="/classes/add" component={AddClass} />
+			<Route path='/classes/edit/:id' component={AddStudent} />
 		</div>
 		</React.Fragment>
 	</Router>

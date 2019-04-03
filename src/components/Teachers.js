@@ -25,7 +25,7 @@ class Teachers extends Component {
 								  </thead>
 								  <tbody>
 								  	<tr>
-								  		<td colspan="7" className="text-center">No data available</td>
+								  		<td colSpan="7" className="text-center">No data available</td>
 								  	</tr>
 								  </tbody>
 								</table>

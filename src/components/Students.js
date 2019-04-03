@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink  } from 'react-router-dom';
 
 class Students extends Component {
 	render() {
@@ -7,7 +8,7 @@ class Students extends Component {
 				<div className="row">
 					<div className="col-md-12">
 						<div className="text-right mb-10">
-							<button className="btn btn-primary"><i className="fa fa-plus"></i> Add New Student</button>
+							<NavLink to="/students/add" className="btn btn-primary"><i className="fa fa-plus"></i> Add New Student</NavLink>
 						</div>
 						<div className="panel panel-default">
 							<div className="panel-body">
@@ -25,7 +26,7 @@ class Students extends Component {
 								  </thead>
 								  <tbody>
 								  	<tr>
-								  		<td colspan="7" className="text-center">No data available</td>
+								  		<td colSpan="7" className="text-center">No data available</td>
 								  	</tr>
 								  </tbody>
 								</table>

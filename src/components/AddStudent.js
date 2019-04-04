@@ -14,7 +14,7 @@ class AddStudent extends Component {
         this.state = {
             firstname : "",
             lastname : "",
-            gender : "",
+            gender : "male",
             dateofbirth : "",
             address : "",
             residential_area : "",

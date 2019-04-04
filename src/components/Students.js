@@ -68,6 +68,7 @@ class Students extends Component {
 									  	<th>Parent Name</th>
 									  	<th>Parent Phone Number</th>
 									  	<th>Residence</th>
+										<th></th>
 									 </tr>
 								  </thead>
 								  <tbody>
@@ -80,6 +81,7 @@ class Students extends Component {
 											  <td>{ student.parent_name }</td>
 											  <td>{ student.parent_phone_number }</td>
 											  <td>{ student.residential_area }</td>
+											  <td><NavLink to={`/student/${student.key}`}><i className="fa fa-eye"></i></NavLink></td>
 										  </tr>
 									  )}
 								  	{/* <tr>

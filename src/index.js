@@ -13,6 +13,8 @@ import Classes from './components/Classes';
 import AddClass from './components/AddClass';
 import EditClass from './components/EditClass';
 import AddStudent from './components/AddStudent';
+import StudentDetails from './components/StudentDetails';
+import EditStudent from './components/EditStudent';
 
 ReactDOM.render(
 	<Router>
@@ -20,9 +22,14 @@ ReactDOM.render(
 		<Nav />
 		<div className="container main-content">
 			<Route exact path="/" component={Dashboard} />
+
 			<Route exact path="/students" component={Students} />
 			<Route path="/students/add" component={AddStudent} />
+			<Route exact path="/student/:id" component={StudentDetails} />
+			<Route path="/student/edit/:id" component={EditStudent} />
+
 			<Route path="/teachers" component={Teachers} />
+
 			<Route exact path="/classes" component={Classes} />
 			<Route path="/classes/add" component={AddClass} />
 			<Route path='/classes/edit/:id' component={EditClass} />

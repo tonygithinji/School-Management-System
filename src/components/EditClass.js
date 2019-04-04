@@ -22,7 +22,7 @@ class EditClass extends Component {
         ref.get().then((doc) => {
             if (doc.exists) {
                 const _class = doc.data();
-                console.log(_class);
+                
                 this.setState({
                     key: doc.id,
                     name: _class.name,
@@ -70,7 +70,7 @@ class EditClass extends Component {
         let button;
 
         if(loading === true){
-            button = <button type="submit" className="btn btn-success"> <i className="fa fa-spinner fa-spin"></i> Updating</button>
+            button = <button type="submit" className="btn btn-success"  disabled="disabled"> <i className="fa fa-spinner fa-spin"></i> Updating</button>
         }else{
             button = <button type="submit" className="btn btn-success">Update Class</button>
         }

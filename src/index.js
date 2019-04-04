@@ -25,7 +25,7 @@ ReactDOM.render(
 			<Route path="/teachers" component={Teachers} />
 			<Route exact path="/classes" component={Classes} />
 			<Route path="/classes/add" component={AddClass} />
-			<Route path='/classes/edit/:id' component={AddStudent} />
+			<Route path='/classes/edit/:id' component={EditClass} />
 		</div>
 		</React.Fragment>
 	</Router>

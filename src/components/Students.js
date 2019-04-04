@@ -1,8 +1,54 @@
 import React, { Component } from 'react';
 import { NavLink  } from 'react-router-dom';
 
+import firebase from '../Firebase';
+
 class Students extends Component {
+
+	constructor(){
+		super();
+
+		this.state = {
+			students: []
+		};
+
+		this.unsubsribe = null;
+		this.ref = firebase.firestore().collection("students");
+	}
+
+	onStudentsUpdate = (snapshot) =>{
+		const students = [];
+
+		snapshot.forEach(doc => {
+			const { firstname, lastname, gender, residential_area, parent_name, parent_phone_number } = doc.data();
+
+			students.push({
+				key: doc.id,
+				firstname: firstname,
+				lastname: lastname,
+				gender: gender,
+				residential_area: residential_area,
+				parent_name: parent_name,
+				parent_phone_number: parent_phone_number
+			});
+		});
+
+		this.setState({
+			students: students
+		});
+	}
+
+	componentDidMount(){
+		this.unsubsribe = this.ref.onSnapshot(this.onStudentsUpdate);
+	}
+
+	componentWillUnmount(){
+		this.unsubsribe();
+	}
+
 	render() {
+		let i = 1;
+
 		return (
 			<React.Fragment>
 				<div className="row">
@@ -25,9 +71,20 @@ class Students extends Component {
 									 </tr>
 								  </thead>
 								  <tbody>
-								  	<tr>
+									  { this.state.students.map(student => 
+										  <tr key={ student.key }>
+										  	  <td>{ i++ }</td>
+											  <td>{ student.firstname }</td>
+											  <td>{ student.lastname }</td>
+											  <td>{ student.gender }</td>
+											  <td>{ student.parent_name }</td>
+											  <td>{ student.parent_phone_number }</td>
+											  <td>{ student.residential_area }</td>
+										  </tr>
+									  )}
+								  	{/* <tr>
 								  		<td colSpan="7" className="text-center">No data available</td>
-								  	</tr>
+								  	</tr> */}
 								  </tbody>
 								</table>
 							</div>

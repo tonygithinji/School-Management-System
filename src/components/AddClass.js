@@ -54,7 +54,7 @@ class Classes extends Component {
         let button;
 
         if(loading === true){
-            button = <button type="submit" className="btn btn-success"> <i className="fa fa-spinner fa-spin"></i> Adding</button>
+            button = <button type="submit" className="btn btn-success"  disabled="disabled"> <i className="fa fa-spinner fa-spin"></i> Adding</button>
         }else{
             button = <button type="submit" className="btn btn-success">Add Class</button>
         }

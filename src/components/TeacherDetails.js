@@ -3,7 +3,7 @@ import { NavLink  } from 'react-router-dom';
 
 import firebase from '../Firebase';
 
-class StudentDetails extends Component {
+class TeacherDetails extends Component {
 
     constructor(){
         super();
@@ -13,21 +13,21 @@ class StudentDetails extends Component {
             firstname: "",
             lastname: "",
             gender: "",
-            residential_area: "",
-            parent_name: "",
-            parent_phone_number: "",
+            phone_number: "",
+            id_number: "",
             dateofbirth: "",
-            address: ""
+            address: "",
+            residential_area: ""
         };
 
         this.unsubscribe = null;
     }
 
     componentDidMount(){
-        let ref = firebase.firestore().collection("students").doc(this.props.match.params.id);
+        let ref = firebase.firestore().collection("teachers").doc(this.props.match.params.id);
 
         this.unsubscribe = ref.onSnapshot(snapshot => {
-            const { firstname, lastname, gender, residential_area, parent_name, parent_phone_number, dateofbirth, address } = snapshot.data();
+            const { firstname, lastname, gender, dateofbirth, address, residential_area, phone_number, id_number } = snapshot.data();
             const id = snapshot.id;
 
             this.setState({
@@ -36,10 +36,10 @@ class StudentDetails extends Component {
                 lastname,
                 gender,
                 residential_area,
-                parent_name,
-                parent_phone_number,
                 dateofbirth,
-                address
+                address,
+                phone_number,
+                id_number
             })
         })
     }
@@ -57,8 +57,8 @@ class StudentDetails extends Component {
         return (
             <div className="row">
                 <div className="col-md-12">
-                    <NavLink to="/students" className="btn btn-default"><i className="fa fa-chevron-left"></i> All Students</NavLink>
-                    <h3 className="text-center">Student Details</h3>
+                    <NavLink to="/teachers" className="btn btn-default"><i className="fa fa-chevron-left"></i> All Teachers</NavLink>
+                    <h3 className="text-center">Teacher Details</h3>
                     <div className="panel panel-default">
                         <div className="panel-body">
                             <div className="row" style={{ padding:10 }}>
@@ -85,6 +85,17 @@ class StudentDetails extends Component {
 
                             <div className="row" style={{ padding:10 }}>
                                 <div className="col-md-6">
+                                    <div style={ styles }><b>Phone Number:</b></div>
+                                    <div style={ styles }>{ this.state.phone_number }</div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div style={ styles }><b>ID Number:</b></div>
+                                    <div style={ styles }>{ this.state.id_number }</div>
+                                </div>
+                            </div>
+
+                            <div className="row" style={{ padding:10 }}>
+                                <div className="col-md-6">
                                     <div style={ styles }><b>Date of Birth:</b></div>
                                     <div style={ styles }>{ this.state.dateofbirth }</div>
                                 </div>
@@ -93,21 +104,10 @@ class StudentDetails extends Component {
                                     <div style={ styles }>{ this.state.address }</div>
                                 </div>
                             </div>
-
-                            <div className="row" style={{ padding:10 }}>
-                                <div className="col-md-6">
-                                    <div style={ styles }><b>Parent's Name:</b></div>
-                                    <div style={ styles }>{ this.state.parent_name }</div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div style={ styles }><b>Parent's Phone Number:</b></div>
-                                    <div style={ styles }>{ this.state.parent_phone_number }</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div className="text-right">
-                        <NavLink to={`/student/edit/${this.state.id}`} className="btn btn-primary"><i className="fa fa-edit"></i> Edit</NavLink>
+                        <NavLink to={`/teacher/edit/${this.state.id}`} className="btn btn-primary"><i className="fa fa-edit"></i> Edit</NavLink>
                     </div>
                 </div>
             </div>
@@ -115,4 +115,4 @@ class StudentDetails extends Component {
     }
 }
 
-export default StudentDetails;
+export default TeacherDetails;

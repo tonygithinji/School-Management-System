@@ -7,14 +7,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Nav from './layout/Nav';
 import Dashboard from './components/Dashboard';
+
 import Students from './components/Students';
-import Teachers from './components/Teachers';
-import Classes from './components/Classes';
-import AddClass from './components/AddClass';
-import EditClass from './components/EditClass';
 import AddStudent from './components/AddStudent';
 import StudentDetails from './components/StudentDetails';
 import EditStudent from './components/EditStudent';
+
+import Classes from './components/Classes';
+import AddClass from './components/AddClass';
+import EditClass from './components/EditClass';
+
+import Teachers from './components/Teachers';
+import AddTeacher from './components/AddTeacher';
+import TeacherDetails from './components/TeacherDetails';
 
 ReactDOM.render(
 	<Router>
@@ -28,7 +33,9 @@ ReactDOM.render(
 			<Route exact path="/student/:id" component={StudentDetails} />
 			<Route path="/student/edit/:id" component={EditStudent} />
 
-			<Route path="/teachers" component={Teachers} />
+			<Route exact path="/teachers" component={Teachers} />
+			<Route path="/teachers/add" component={AddTeacher} />
+			<Route exact path="/teacher/:id" component={TeacherDetails} />
 
 			<Route exact path="/classes" component={Classes} />
 			<Route path="/classes/add" component={AddClass} />

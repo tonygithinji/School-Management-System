@@ -17,7 +17,8 @@ class TeacherDetails extends Component {
             id_number: "",
             dateofbirth: "",
             address: "",
-            residential_area: ""
+            residential_area: "",
+            classes: []
         };
 
         this.unsubscribe = null;
@@ -40,8 +41,20 @@ class TeacherDetails extends Component {
                 address,
                 phone_number,
                 id_number
-            })
-        })
+            });
+
+            ref.collection("classes").onSnapshot(snapshot => {
+                const _classes = [];
+                snapshot.forEach(doc => {
+                    const { name } = doc.data();
+                    _classes.push(name);
+                });
+
+                this.setState({
+                    classes: _classes
+                });
+            });
+        });
     }
 
     componentWillUnmount(){
@@ -102,6 +115,16 @@ class TeacherDetails extends Component {
                                 <div className="col-md-6">
                                     <div style={ styles }><b>Address:</b></div>
                                     <div style={ styles }>{ this.state.address }</div>
+                                </div>
+                            </div>
+                            <div className="row" style={{ padding:10 }}>
+                                <div className="col-md-12">
+                                    <div style={ {width: "20%",display: "inline-block"} }><b>Classes:</b></div>
+                                    <div style={ {width: "80%",display: "inline-block"} }>
+                                        {this.state.classes.map(_class => 
+                                            <span key={_class} className="badge badge-info">{ _class }</span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>

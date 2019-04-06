@@ -20,13 +20,13 @@ class Classes extends Component {
 		const classes = [];
 
 		snapshot.forEach((doc) => {
-			const { name, capacity } = doc.data();
+			const { name, capacity, teachers_num, students_num } = doc.data();
 			classes.push({
 				key: doc.id,
 				name: name,
 				capacity: capacity,
-				students_num: 0,
-				teachers_num: 0
+				students_num: students_num,
+				teachers_num: teachers_num
 			});
 		});
 
@@ -70,11 +70,11 @@ class Classes extends Component {
 									  {this.state.classes.map(_class => 
 										  	<tr key={_class.key}>
 												<td>{ i++ }</td>
-												<td><NavLink to={`/classes/edit/${_class.key}`}>{_class.name}</NavLink></td>
+												<td><NavLink to={`/class/${_class.key}`}>{_class.name}</NavLink></td>
 												<td>{ _class.students_num }</td>
 												<td>{ _class.teachers_num }</td>
 												<td>{ _class.capacity }</td>
-												<td>{ _class.full === 1 ? <label className="badge badge-warning">Full</label> :  <label className="badge badge-success">Available</label> }</td>
+												<td>{ _class.students_num == _class.capacity ? <label className="badge badge-warning">Full</label> :  <label className="badge badge-success">Available</label> }</td>
 											</tr>
 									  )}
 

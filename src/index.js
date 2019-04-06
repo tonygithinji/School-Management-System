@@ -15,11 +15,13 @@ import EditStudent from './components/EditStudent';
 
 import Classes from './components/Classes';
 import AddClass from './components/AddClass';
+import ClassDetails from './components/ClassDetails';
 import EditClass from './components/EditClass';
 
 import Teachers from './components/Teachers';
 import AddTeacher from './components/AddTeacher';
 import TeacherDetails from './components/TeacherDetails';
+import EditTeacher from './components/EditTeacher';
 
 ReactDOM.render(
 	<Router>
@@ -36,10 +38,12 @@ ReactDOM.render(
 			<Route exact path="/teachers" component={Teachers} />
 			<Route path="/teachers/add" component={AddTeacher} />
 			<Route exact path="/teacher/:id" component={TeacherDetails} />
+			<Route path="/teacher/edit/:id" component={EditTeacher} />
 
 			<Route exact path="/classes" component={Classes} />
 			<Route path="/classes/add" component={AddClass} />
-			<Route path='/classes/edit/:id' component={EditClass} />
+			<Route exact path="/class/:id" component={ClassDetails} />
+			<Route path='/class/edit/:id' component={EditClass} />
 		</div>
 		</React.Fragment>
 	</Router>

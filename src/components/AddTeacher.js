@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { NavLink  } from 'react-router-dom';
+import { MultiSelect } from 'react-selectize';
 
 import firebase from '../Firebase';
+import '../../node_modules/react-selectize/themes/index.css'
 
 class AddTeacher extends Component {
 
@@ -19,7 +21,7 @@ class AddTeacher extends Component {
             residential_area: "",
             loading: false,
             link_class: false,
-            teacher_class: "",
+            teacher_class: [],
             classes: []
         }
 
@@ -56,7 +58,31 @@ class AddTeacher extends Component {
 
         if(link_class){
             // Update the class collection
-            this.addStudentWithClass(teacher_class, teacher).then(() => {
+            // this.state.teacher_class.map((_class) => {
+            //     let promises = [];
+
+            //     promises.push(this.addTeacherWithClass(_class, teacher));
+
+            //     Promise.all(promises).then(() => {
+            //         this.setState({
+            //             firstname: "",
+            //             lastname: "",
+            //             gender: "",
+            //             phone_number: "",
+            //             id_number: "",
+            //             dateofbirth: "",
+            //             address: "",
+            //             residential_area: "",
+            //             loading: false,
+            //             link_class: false,
+            //             teacher_class: "",
+            //             classes: []
+            //         }, () => {
+            //             this.props.history.push("/teachers");
+            //         });
+            //     })
+            // })
+            this.addTeacherWithClass(teacher_class, teacher).then(() => {
                 this.setState({
                     firstname: "",
                     lastname: "",
@@ -75,7 +101,7 @@ class AddTeacher extends Component {
                 });
             })
         }else{
-            this.addStudentWithoutClass(teacher).then(() => {
+            this.addTeacherWithoutClass(teacher).then(() => {
                 this.setState({
                     firstname: "",
                     lastname: "",
@@ -117,43 +143,51 @@ class AddTeacher extends Component {
         });
     }
 
-    addStudentWithClass = (class_id, teacher) => {
-        let classRef = firebase.firestore().collection('classes').doc(class_id);
+    addTeacherWithClass = (classes, teacher) => {
+        return this.ref.add({
+            firstname: teacher.firstname,
+            lastname: teacher.lastname,
+            gender: teacher.gender,
+            dateofbirth: teacher.dateofbirth,
+            address: teacher.address,
+            residential_area: teacher.residential_area,
+            phone_number: teacher.phone_number,
+            id_number: teacher.id_number,
+            // class: {
+            //     id: doc.id,
+            //     name: name
+            // }
+        }).then((teacherRef) => {
+            classes.map(_class => {
+                let classRef = firebase.firestore().collection("classes").doc(_class.id);
 
-        return classRef.get().then(doc => {
-            const { name } = doc.data();
-
-            this.ref.add({
-                firstname: teacher.firstname,
-                lastname: teacher.lastname,
-                gender: teacher.gender,
-                dateofbirth: teacher.dateofbirth,
-                address: teacher.address,
-                residential_area: teacher.residential_area,
-                phone_number: teacher.phone_number,
-                id_number: teacher.id_number,
-                class: {
-                    id: doc.id,
-                    name: name
-                }
-            }).then(() => {
-
-                return classRef.collection('teachers').add({
-                    // id: teacher.id,
-                    firstname: teacher.firstname,
-                    lastname: teacher.lastname,
-                    gender: teacher.gender,
-                    dateofbirth: teacher.dateofbirth,
-                    address: teacher.address,
-                    residential_area: teacher.residential_area,
-                    phone_number: teacher.phone_number,
-                    id_number: teacher.id_number,
+                teacherRef.collection('classes').add({
+                    name: _class.name,
+                    id: _class.id
+                }).then(() => {
+                    classRef.collection('teachers').add({
+                        // id: teacher.id,
+                        firstname: teacher.firstname,
+                        lastname: teacher.lastname,
+                        gender: teacher.gender,
+                        dateofbirth: teacher.dateofbirth,
+                        address: teacher.address,
+                        residential_area: teacher.residential_area,
+                        phone_number: teacher.phone_number,
+                        id_number: teacher.id_number,
+                    }).then(() => {
+                        return classRef.update({
+                            teachers_num: firebase.firestore.FieldValue.increment(1)
+                        })
+                    });
                 });
-            })
-        })
+            });
+        });
+
+        // return Promise.all(promises);
     }
 
-    addStudentWithoutClass = (teacher) => {
+    addTeacherWithoutClass = (teacher) => {
         return this.ref.add({
             firstname: teacher.firstname,
             lastname: teacher.lastname,
@@ -164,6 +198,21 @@ class AddTeacher extends Component {
             phone_number: teacher.phone_number,
             id_number: teacher.id_number,
         });
+    }
+
+    onValuesChange = (data) => {
+        const _class = [];
+        data.forEach((val) => {
+            _class.push({
+                id: val.value,
+                name: val.label
+            })
+        });
+
+        this.setState({
+            teacher_class: _class
+        });
+        console.log(_class)
     }
 
     componentWillUnmount(){
@@ -186,13 +235,14 @@ class AddTeacher extends Component {
         if(link_class === true){
             this.fetchClasses();
 
+            const options = this.state.classes.map((_class) => {
+                return { label: _class.name, value:  _class.key}
+            });
+
             select_class = <div className="form-group">
                                 <label>Select a class</label>
-                                <select className="form-control" name="teacher_class" value={teacher_class} onChange={this.onChange}>
-                                    { this.state.classes.map(_class => 
-                                        <option key={ _class.key } value={ _class.key }>{ _class.name }</option>
-                                    ) }
-                                </select>
+                                <MultiSelect options = {options} placeholder = "Select a class" onValuesChange = {this.onValuesChange}></MultiSelect>
+                                {/*<MultiSelect options = {options} placeholder = "Select a class" onValuesChange = {value => console.log(value)}></MultiSelect>*/}
                             </div>
         }
 

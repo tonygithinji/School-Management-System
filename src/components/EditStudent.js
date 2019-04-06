@@ -61,7 +61,7 @@ class EditStudent extends Component {
         const { firstname, lastname, gender, dateofbirth, address, residential_area, parent_name, parent_phone_number } = this.state;
         const updateRef = firebase.firestore().collection('students').doc(this.state.key);
 
-        updateRef.set({
+        updateRef.update({
             firstname: firstname,
             lastname: lastname,
             gender: gender,

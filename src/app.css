@@ -33,3 +33,9 @@ background-color: #3a87ad !important;
 .badge-info:hover {
 background-color: #2d6987;
 }
+.react-selectize.root-node{
+	width: 100% !important;
+}
+.badge{
+	margin: 0 5px;
+}

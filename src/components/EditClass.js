@@ -49,7 +49,7 @@ class EditClass extends Component {
         const { name, capacity } = this.state;
         const updateRef = firebase.firestore().collection('classes').doc(this.state.key);
 
-        updateRef.set({
+        updateRef.update({
             name: name,
             capacity: capacity
         }).then((docRef)=>{
@@ -58,7 +58,7 @@ class EditClass extends Component {
                 capacity: "",
                 loading: false
             }, () => {
-                this.props.history.push("/classes");
+                this.props.history.push(`/class/${this.state.key}`);
             });
         }).catch((error) => {
             console.error("Error adding document: ", error);

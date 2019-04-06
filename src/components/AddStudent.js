@@ -138,7 +138,7 @@ class AddStudent extends Component {
                 }
             }).then(() => {
 
-                return classRef.collection('students').add({
+                classRef.collection('students').add({
                     // id: student.id,
                     firstname: student.firstname,
                     lastname: student.lastname,
@@ -148,6 +148,10 @@ class AddStudent extends Component {
                     residential_area: student.residential_area,
                     parent_name: student.parent_name,
                     parent_phone_number: student.parent_phone_number
+                }).then(() => {
+                    return classRef.update({
+                        students_num: firebase.firestore.FieldValue.increment(1)
+                    });
                 });
             })
         })
@@ -184,7 +188,7 @@ class AddStudent extends Component {
         }
 
         if(link_class === true){
-            this.fetchClasses();
+            this.fetchClasses();            
 
             select_class = <div className="form-group">
                                 <label>Select a class</label>

@@ -45,13 +45,36 @@ class Classes extends Component {
 
 	render() {
 		let i = 1;
+		let rows = "";
+
+		if(this.state.classes.length > 0){
+			rows = this.state.classes.map(_class => 
+										  	<tr key={_class.key}>
+												<td>{ i++ }</td>
+												<td><NavLink to={`/class/${_class.key}`}>{_class.name}</NavLink></td>
+												<td>{ _class.students_num }</td>
+												<td>{ _class.teachers_num }</td>
+												<td>{ _class.capacity }</td>
+												<td>{ _class.students_num == _class.capacity ? <label className="badge badge-warning">Full</label> :  <label className="badge badge-success">Available</label> }</td>
+											</tr>
+									  )
+		}else{
+			rows = <tr>
+					 <td colSpan="6" className="text-center">No classes available</td>
+				   </tr>
+		}
 
 		return (
 			<React.Fragment>
 				<div className="row">
 					<div className="col-md-12">
-						<div className="text-right mb-10">
-							<NavLink to="/classes/add" className="btn btn-primary"><i className="fa fa-plus"></i> Add New Class</NavLink>
+						<div className="clearfix mb-10">
+							<div className="pull-left">
+								<h3>Classes</h3>
+							</div>
+							<div className="pull-right">
+								<NavLink to="/classes/add" className="btn btn-primary" style={{marginTop:20}}><i className="fa fa-plus"></i> Add New Class</NavLink>
+							</div>
 						</div>
 						<div className="panel panel-default">
 							<div className="panel-body">
@@ -67,16 +90,7 @@ class Classes extends Component {
 									 </tr>
 								  </thead>
 								  <tbody>
-									  {this.state.classes.map(_class => 
-										  	<tr key={_class.key}>
-												<td>{ i++ }</td>
-												<td><NavLink to={`/class/${_class.key}`}>{_class.name}</NavLink></td>
-												<td>{ _class.students_num }</td>
-												<td>{ _class.teachers_num }</td>
-												<td>{ _class.capacity }</td>
-												<td>{ _class.students_num == _class.capacity ? <label className="badge badge-warning">Full</label> :  <label className="badge badge-success">Available</label> }</td>
-											</tr>
-									  )}
+									  {rows}
 
 
 								  	{/* <tr>

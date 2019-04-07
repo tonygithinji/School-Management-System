@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { NavLink  } from 'react-router-dom';
 
 import firebase from '../Firebase';
+import DatePicker from "react-datepicker";
+import moment from 'moment';
+ 
+import "react-datepicker/dist/react-datepicker.css";
 
 class AddStudent extends Component {
 
@@ -10,26 +14,42 @@ class AddStudent extends Component {
 
         this.ref = firebase.firestore().collection('students');
         this.unsubsribe = null;
+        this.re = new RegExp("^[0]{1}[7]{1}[0-9]{8}$");
 
         this.state = {
             firstname : "",
             lastname : "",
             gender : "male",
-            dateofbirth : "",
+            dateofbirth : new Date(),
             address : "",
             residential_area : "",
             parent_name : "",
             parent_phone_number : "",
-            link_class: false,
+            link_class: true,
             loading : false,
             student_class: "",
-            classes: []
+            formatted_date: "",
+            classes: [],
+            error: ""
         }
     }
 
     onChange = (e) => {
         const state = this.state;
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+
+        if(e.target.name == "parent_phone_number"){
+
+            if(this.re.test(value)){
+                this.setState({
+                    error: ""
+                });
+            }else{
+                this.setState({
+                    error: "phone_number"
+                });
+            }
+        }
 
         state[e.target.name] = value;
         this.setState(state);
@@ -41,13 +61,24 @@ class AddStudent extends Component {
             loading: true
         });
 
-        const { firstname, lastname, gender, dateofbirth, address, residential_area, parent_name, parent_phone_number, link_class, student_class } = this.state;
+        const { firstname, lastname, gender, formatted_date, address, residential_area, parent_name, parent_phone_number, link_class, student_class } = this.state;
+
+        if(this.re.test(parent_phone_number)){
+            // do nothing
+        }else{
+            this.setState({
+                error: "phone_number",
+                loading: false
+            });
+
+            return;
+        }
 
         const student = {
             firstname,
             lastname,
             gender,
-            dateofbirth,
+            dateofbirth: formatted_date,
             address,
             residential_area,
             parent_name,
@@ -61,7 +92,7 @@ class AddStudent extends Component {
                     firstname: "",
                     lastname: "",
                     gender: "",
-                    dateofbirth: "",
+                    formatted_date: "",
                     address: "",
                     residential_area: "",
                     parent_name: "",
@@ -79,7 +110,7 @@ class AddStudent extends Component {
                     firstname: "",
                     lastname: "",
                     gender: "",
-                    dateofbirth: "",
+                    formatted_date: "",
                     address: "",
                     residential_area: "",
                     parent_name: "",
@@ -100,12 +131,14 @@ class AddStudent extends Component {
 
         this.unsubsribe = ref.onSnapshot(snapshot => {
             snapshot.forEach(doc => {
-                const { name } = doc.data();
+                const { name, capacity, students_num } = doc.data();
 
-                classes.push({
-                    key: doc.id,
-                    name: name
-                })
+                if(students_num < capacity){
+                    classes.push({
+                        key: doc.id,
+                        name: name
+                    });
+                }
             });
 
             this.setState({
@@ -132,7 +165,7 @@ class AddStudent extends Component {
                 residential_area: student.residential_area,
                 parent_name: student.parent_name,
                 parent_phone_number: student.parent_phone_number,
-                class: {
+                classname: {
                     id: doc.id,
                     name: name
                 }
@@ -170,6 +203,14 @@ class AddStudent extends Component {
         });
     }
 
+    handleChange = (date) => {
+        let d = moment(date);
+        this.setState({
+            formatted_date: d.format("DD/MM/YYYY"),
+            dateofbirth: date
+        });
+    }
+
     componentWillUnmount(){
         if(this.unsubsribe){
             this.unsubsribe();
@@ -180,6 +221,7 @@ class AddStudent extends Component {
         const { firstname, lastname, gender, dateofbirth, address, residential_area, parent_name, parent_phone_number, link_class, student_class, loading } = this.state;
         let button;
         let select_class;
+        let error = "form-control";
 
         if(loading === true){
             button = <button type="submit" className="btn btn-success" disabled="disabled"> <i className="fa fa-spinner fa-spin"></i> Adding</button>
@@ -198,6 +240,10 @@ class AddStudent extends Component {
                                     ) }
                                 </select>
                             </div>
+        }
+
+        if(this.state.error == "phone_number"){
+            error = "form-control error";
         }
 
         return (
@@ -226,7 +272,8 @@ class AddStudent extends Component {
                                     </div>
                                     <div className="form-group">
                                         <label>Date of Birth</label>
-                                        <input type="text" className="form-control" name="dateofbirth" value={dateofbirth} onChange={this.onChange} />
+                                        {/*<input type="text" className="form-control" name="dateofbirth" value={dateofbirth} onChange={this.onChange} />*/}
+                                        <DatePicker selected={this.state.dateofbirth} onChange={this.handleChange} className="form-control" placeholderText="Select a date" peekNextMonth showMonthDropdown showYearDropdown dropdownMode="select" />
                                     </div>
                                     <div className="form-group">
                                         <label>Address</label>
@@ -242,15 +289,15 @@ class AddStudent extends Component {
                                     </div>
                                     <div className="form-group">
                                         <label>Parent's Phone Number</label>
-                                        <input type="text" className="form-control" name="parent_phone_number" value={parent_phone_number} onChange={this.onChange} />
+                                        <input type="text" className={error} name="parent_phone_number" value={parent_phone_number} onChange={this.onChange} />
                                     </div>
-                                    <div className="form-group">
+                                    {/*<div className="form-group">
                                         <div className="checkbox">
                                             <label>
                                                 <input type="checkbox" name="link_class" checked={link_class} onChange={this.onChange} /> Add to class
                                             </label>
                                         </div>
-                                    </div>
+                                    </div>*/}
                                     { select_class }
                                     <div className="text-right">
                                         { button }

@@ -98,6 +98,47 @@ class ClassDetails extends Component {
         let i = 1;
         let k = 1;
 
+        let rows1 = "";
+        let rows2 = "";
+
+        if(this.state.students.length > 0){
+            rows1 = this.state.students.map(student => 
+                      <tr key={ student.key }>
+                          <td>{ i++ }</td>
+                          <td>{ student.firstname }</td>
+                          <td>{ student.lastname }</td>
+                          <td>{ student.gender }</td>
+                          <td>{ student.parent_name }</td>
+                          <td>{ student.parent_phone_number }</td>
+                          <td>{ student.residential_area }</td>
+                          <td><NavLink to={`/student/${student.key}`}><i className="fa fa-eye"></i></NavLink></td>
+                      </tr>
+                  )
+        }else{
+            rows1 = <tr>
+                        <td colSpan="8" className="text-center">No students available</td>
+                    </tr>;
+        }
+
+        if(this.state.teachers.length > 0){
+            rows2 = this.state.teachers.map(teacher => 
+                        <tr key={ teacher.key }>
+                            <td>{ k++ }</td>
+                            <td>{ teacher.firstname }</td>
+                            <td>{ teacher.lastname }</td>
+                            <td>{ teacher.phone_number }</td>
+                            <td>{ teacher.id_number }</td>
+                            <td>{ teacher.dateofbirth }</td>
+                            <td>{ teacher.residential_area }</td>
+                            <td><NavLink to={`/teacher/${teacher.key}`}><i className="fa fa-eye"></i></NavLink></td>
+                        </tr>
+                    )
+        }else{
+            rows2 = <tr>
+                        <td colSpan="8" className="text-center">No teachers available</td>
+                    </tr>;
+        }
+
         return (
             <div className="row">
                 <div className="col-md-12">
@@ -149,21 +190,7 @@ class ClassDetails extends Component {
                                  </tr>
                               </thead>
                               <tbody>
-                                  { this.state.students.map(student => 
-                                      <tr key={ student.key }>
-                                          <td>{ i++ }</td>
-                                          <td>{ student.firstname }</td>
-                                          <td>{ student.lastname }</td>
-                                          <td>{ student.gender }</td>
-                                          <td>{ student.parent_name }</td>
-                                          <td>{ student.parent_phone_number }</td>
-                                          <td>{ student.residential_area }</td>
-                                          <td><NavLink to={`/student/${student.key}`}><i className="fa fa-eye"></i></NavLink></td>
-                                      </tr>
-                                  )}
-                                {/* <tr>
-                                    <td colSpan="7" className="text-center">No data available</td>
-                                </tr> */}
+                                  { rows1 }
                               </tbody>
                             </table>
                         </div>
@@ -186,21 +213,7 @@ class ClassDetails extends Component {
                                  </tr>
                               </thead>
                               <tbody>
-                                  {this.state.teachers.map(teacher => 
-                                        <tr key={ teacher.key }>
-                                            <td>{ k++ }</td>
-                                            <td>{ teacher.firstname }</td>
-                                            <td>{ teacher.lastname }</td>
-                                            <td>{ teacher.phone_number }</td>
-                                            <td>{ teacher.id_number }</td>
-                                            <td>{ teacher.dateofbirth }</td>
-                                            <td>{ teacher.residential_area }</td>
-                                            <td><NavLink to={`/teacher/${teacher.key}`}><i className="fa fa-eye"></i></NavLink></td>
-                                        </tr>
-                                    )}
-                                {/* <tr>
-                                    <td colSpan="7" className="text-center">No data available</td>
-                                </tr> */}
+                                  { rows2 }
                               </tbody>
                             </table>
                         </div>

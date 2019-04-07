@@ -33,7 +33,7 @@ class Classes extends Component {
 
         this.ref.add({
             name,
-            capacity,
+            capacity: parseInt(capacity),
             students_num: 0,
             teachers_num: 0
         }).then((docRef)=>{

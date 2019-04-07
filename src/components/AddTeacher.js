@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { NavLink  } from 'react-router-dom';
 import { MultiSelect } from 'react-selectize';
+import DatePicker from "react-datepicker";
+import moment from 'moment';
 
 import firebase from '../Firebase';
-import '../../node_modules/react-selectize/themes/index.css'
+import '../../node_modules/react-selectize/themes/index.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 class AddTeacher extends Component {
 
@@ -16,17 +19,21 @@ class AddTeacher extends Component {
             gender: "male",
             phone_number: "",
             id_number: "",
-            dateofbirth: "",
+            dateofbirth:  new Date(),
             address: "",
             residential_area: "",
             loading: false,
-            link_class: false,
+            link_class: true,
             teacher_class: [],
-            classes: []
+            classes: [],
+            error: "",
+            formatted_date: "",
         }
 
         this.ref = firebase.firestore().collection("teachers");
         this.unsubsribe = null;
+        this.phone_number_re = new RegExp("^[0]{1}[7]{1}[0-9]{8}$");
+        this.idnumber_re = new RegExp("^[0-9]{8}$");
     }
 
     onChange = (e) => {
@@ -43,13 +50,35 @@ class AddTeacher extends Component {
             loading: true
         });
 
-        const { firstname, lastname, gender, dateofbirth, address, residential_area, phone_number, id_number, link_class, teacher_class } = this.state;
+        const { firstname, lastname, gender, formatted_date, address, residential_area, phone_number, id_number, link_class, teacher_class } = this.state;
 
+        if(this.phone_number_re.test(phone_number)){
+            // do nothing
+        }else{
+            this.setState({
+                error: "phone_number",
+                loading: false
+            });
+
+            return;
+        }
+
+        if(this.idnumber_re.test(id_number)){
+            // do nothing
+        }else{
+            this.setState({
+                error: "id_number",
+                loading: false
+            });
+
+            return;
+        }
+        
         const teacher = {
             firstname,
             lastname,
             gender,
-            dateofbirth,
+            dateofbirth: formatted_date,
             address,
             residential_area,
             phone_number,
@@ -89,7 +118,7 @@ class AddTeacher extends Component {
                     gender: "",
                     phone_number: "",
                     id_number: "",
-                    dateofbirth: "",
+                    formatted_date: "",
                     address: "",
                     residential_area: "",
                     loading: false,
@@ -108,7 +137,7 @@ class AddTeacher extends Component {
                     gender: "",
                     phone_number: "",
                     id_number: "",
-                    dateofbirth: "",
+                    formatted_date: "",
                     address: "",
                     residential_area: "",
                     link_class: false,
@@ -212,7 +241,14 @@ class AddTeacher extends Component {
         this.setState({
             teacher_class: _class
         });
-        console.log(_class)
+    }
+
+    handleChange = (date) => {
+        let d = moment(date);
+        this.setState({
+            formatted_date: d.format("DD/MM/YYYY"),
+            dateofbirth: date
+        });
     }
 
     componentWillUnmount(){
@@ -225,6 +261,8 @@ class AddTeacher extends Component {
         const { firstname, lastname, gender, dateofbirth, address, residential_area, phone_number, id_number, link_class, teacher_class, loading } = this.state;
         let button;
         let select_class;
+        let error_phonenumber = "form-control";
+        let error_idnumber = "form-control";
 
         if(loading === true){
             button = <button type="submit" className="btn btn-success" disabled="disabled"> <i className="fa fa-spinner fa-spin"></i> Adding</button>
@@ -244,6 +282,12 @@ class AddTeacher extends Component {
                                 <MultiSelect options = {options} placeholder = "Select a class" onValuesChange = {this.onValuesChange}></MultiSelect>
                                 {/*<MultiSelect options = {options} placeholder = "Select a class" onValuesChange = {value => console.log(value)}></MultiSelect>*/}
                             </div>
+        }
+
+        if(this.state.error == "phone_number"){
+            error_phonenumber = "form-control error";
+        }else if(this.state.error == "id_number"){
+            error_idnumber = "form-control error";
         }
 
         return (
@@ -272,15 +316,15 @@ class AddTeacher extends Component {
                                     </div>
                                     <div className="form-group">
                                         <label>Date of Birth</label>
-                                        <input type="text" className="form-control" name="dateofbirth" value={dateofbirth} onChange={this.onChange} />
+                                        <DatePicker selected={this.state.dateofbirth} onChange={this.handleChange} className="form-control" placeholderText="Select a date" peekNextMonth showMonthDropdown showYearDropdown dropdownMode="select" />
                                     </div>
                                     <div className="form-group">
                                         <label>Phone Number</label>
-                                        <input type="text" className="form-control" name="phone_number" value={phone_number} onChange={this.onChange} />
+                                        <input type="text" className={ error_phonenumber } name="phone_number" value={phone_number} onChange={this.onChange} />
                                     </div>
                                     <div className="form-group">
                                         <label>ID Number</label>
-                                        <input type="text" className="form-control" name="id_number" value={id_number} onChange={this.onChange} />
+                                        <input type="text" className={ error_idnumber } name="id_number" value={id_number} onChange={this.onChange} />
                                     </div>
                                     <div className="form-group">
                                         <label>Address</label>
@@ -290,13 +334,13 @@ class AddTeacher extends Component {
                                         <label>Residential Area</label>
                                         <input type="text" className="form-control" name="residential_area" value={residential_area} onChange={this.onChange} />
                                     </div>
-                                    <div className="form-group">
+                                    {/*<div className="form-group">
                                         <div className="checkbox">
                                             <label>
                                                 <input type="checkbox" name="link_class" checked={link_class} onChange={this.onChange} /> Add to class
                                             </label>
                                         </div>
-                                    </div>
+                                    </div>*/}
                                     { select_class }
                                     <div className="text-right">
                                         { button }

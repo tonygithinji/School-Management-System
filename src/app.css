@@ -39,3 +39,14 @@ background-color: #2d6987;
 .badge{
 	margin: 0 5px;
 }
+.react-datepicker-wrapper, .react-datepicker__input-container, .react-datepicker__input-container input {
+    width: 100% !important;
+}
+input.error{
+	border: 1px solid #ff0000;
+}
+input.error:focus {
+    border-color: #ff0000 !important;
+    outline: 0 !important;
+    box-shadow: inset 0 1px 1px rgba(255,0,0,.075), 0 0 8px rgba(255,0,0,.6) !important;
+}

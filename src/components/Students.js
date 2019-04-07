@@ -48,13 +48,38 @@ class Students extends Component {
 
 	render() {
 		let i = 1;
+		let rows = "";
+
+		if(this.state.students.length > 0){
+			rows = this.state.students.map(student => 
+					  <tr key={ student.key }>
+					  	  <td>{ i++ }</td>
+						  <td>{ student.firstname }</td>
+						  <td>{ student.lastname }</td>
+						  <td>{ student.gender }</td>
+						  <td>{ student.parent_name }</td>
+						  <td>{ student.parent_phone_number }</td>
+						  <td>{ student.residential_area }</td>
+						  <td><NavLink to={`/student/${student.key}`}><i className="fa fa-eye"></i></NavLink></td>
+					  </tr>
+				  )
+		}else{
+			rows = <tr>
+				  		<td colSpan="8" className="text-center">No students available</td>
+				  	</tr>
+		}
 
 		return (
 			<React.Fragment>
 				<div className="row">
 					<div className="col-md-12">
-						<div className="text-right mb-10">
-							<NavLink to="/students/add" className="btn btn-primary"><i className="fa fa-plus"></i> Add New Student</NavLink>
+						<div className="clearfix mb-10">
+							<div className="pull-left">
+								<h3>Students</h3>
+							</div>
+							<div className="pull-right">
+								<NavLink to="/students/add" className="btn btn-primary" style={{marginTop:20}}><i className="fa fa-plus"></i> Add New Student</NavLink>
+							</div>
 						</div>
 						<div className="panel panel-default">
 							<div className="panel-body">
@@ -72,21 +97,7 @@ class Students extends Component {
 									 </tr>
 								  </thead>
 								  <tbody>
-									  { this.state.students.map(student => 
-										  <tr key={ student.key }>
-										  	  <td>{ i++ }</td>
-											  <td>{ student.firstname }</td>
-											  <td>{ student.lastname }</td>
-											  <td>{ student.gender }</td>
-											  <td>{ student.parent_name }</td>
-											  <td>{ student.parent_phone_number }</td>
-											  <td>{ student.residential_area }</td>
-											  <td><NavLink to={`/student/${student.key}`}><i className="fa fa-eye"></i></NavLink></td>
-										  </tr>
-									  )}
-								  	{/* <tr>
-								  		<td colSpan="7" className="text-center">No data available</td>
-								  	</tr> */}
+									  { rows }
 								  </tbody>
 								</table>
 							</div>

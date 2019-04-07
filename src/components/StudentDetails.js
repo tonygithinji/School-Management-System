@@ -17,7 +17,8 @@ class StudentDetails extends Component {
             parent_name: "",
             parent_phone_number: "",
             dateofbirth: "",
-            address: ""
+            address: "",
+            classname: ""
         };
 
         this.unsubscribe = null;
@@ -27,7 +28,7 @@ class StudentDetails extends Component {
         let ref = firebase.firestore().collection("students").doc(this.props.match.params.id);
 
         this.unsubscribe = ref.onSnapshot(snapshot => {
-            const { firstname, lastname, gender, residential_area, parent_name, parent_phone_number, dateofbirth, address } = snapshot.data();
+            const { firstname, lastname, gender, residential_area, parent_name, parent_phone_number, dateofbirth, address, classname } = snapshot.data();
             const id = snapshot.id;
 
             this.setState({
@@ -39,9 +40,10 @@ class StudentDetails extends Component {
                 parent_name,
                 parent_phone_number,
                 dateofbirth,
-                address
-            })
-        })
+                address,
+                classname: classname
+            });
+        });
     }
 
     componentWillUnmount(){
@@ -102,6 +104,12 @@ class StudentDetails extends Component {
                                 <div className="col-md-6">
                                     <div style={ styles }><b>Parent's Phone Number:</b></div>
                                     <div style={ styles }>{ this.state.parent_phone_number }</div>
+                                </div>
+                            </div>
+                             <div className="row" style={{ padding:10 }}>
+                                <div className="col-md-6">
+                                    <div style={ styles }><b>Class:</b></div>
+                                    <div style={ styles }><span className="badge badge-info">{ this.state.classname.name }</span></div>
                                 </div>
                             </div>
                         </div>
